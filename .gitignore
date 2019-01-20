@@ -1,5 +1,6 @@
 .idea/*
 
 api_key.txt
+vk_api_token.txt
 
 *.wav
