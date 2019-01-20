@@ -1,5 +1,5 @@
-./idea
+.idea/*
 
 api_key.txt
 
-.wav
+*.wav
