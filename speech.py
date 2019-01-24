@@ -37,8 +37,13 @@ def recognize(wav_audio):
 
     with audio_to_recognize as source:
         audio = r.record(source)
-        text = r.recognize_google(audio, language='ru-RU')
-
+        text = ""
+        try:
+            text = r.recognize_google(audio, language='ru-RU')
+        except sr.UnknownValueError:
+            text = "Речь неразборчива. Не могу распознать."
+        except sr.RequestError:
+            text = "Распознавание завершилось неудачно."
     return text
 
 
@@ -63,6 +68,7 @@ if __name__ == "__main__":
             continue
         if updates:
             for element in updates:
+                print(element)
                 summands = []  # массив, где мы будем хранить слагаемые
                 flag = element[2]  # флаг сообщения
                 for number in [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 65536]:  # проходим циклом по возможным слагаемым
