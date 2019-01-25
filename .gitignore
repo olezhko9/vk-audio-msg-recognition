@@ -3,4 +3,6 @@
 api_key.txt
 vk_api_token.txt
 
+*.log
+*.ogg
 *.wav
