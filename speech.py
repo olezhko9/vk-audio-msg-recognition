@@ -45,8 +45,11 @@ def recognize(wav_audio):
 if __name__ == "__main__":
     ogg_voice = 'voice.ogg'
     wav_voice = 'voice.wav'
-
+    # login = input("Введите логин: ")
+    # password = input("Введите пароль: ")
+    # vk_session = vk_api.VkApi(login, password)
     vk_session = vk_api.VkApi(token=get_vk_token())
+    # vk_session.auth()
     vk = vk_session.get_api()
     long_poll_server = VkLongPoll(vk_session)
 
@@ -61,7 +64,7 @@ if __name__ == "__main__":
                     if attachments['attach1_kind'] == 'audiomsg':
                         message = vk.messages.getById(message_ids=event.message_id, v=5.92)
                         ogg_link = message['items'][0]['attachments'][0]['audio_message']['link_ogg']
-                        from_id = message['items'][0]['from_id']
+                        from_id = message['items'][0]['peer_id']
                         logging.info(u'Аудио сообщение от %d: %s' % (from_id, ogg_link))
 
                         download_audio(ogg_link, ogg_voice)
@@ -69,7 +72,9 @@ if __name__ == "__main__":
                         audio_text = recognize(wav_voice)
                         logging.info(u'Текст сообщения: %s' % audio_text)
 
-                        vk.messages.send(message=audio_text, peer_id=from_id, reply_to=event.message_id,
+                        reply_id = vk.messages.send(message=audio_text, peer_id=from_id, reply_to=event.message_id,
                                          random_id=random.randint(0, 10e9), v=5.92)
+
+                        logging.info(u'Ответ сообщением с номером: %d' % reply_id)
                 except KeyError:
                     continue
